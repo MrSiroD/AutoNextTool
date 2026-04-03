@@ -1,47 +1,164 @@
 package com.donglm.autonexttool
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.PixelFormat
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.donglm.autonexttool.ui.theme.AutoNextToolTheme
+import androidx.appcompat.widget.AppCompatButton
+
 
 class MainActivity : ComponentActivity() {
+    private val TAG = "donglm"
+    private lateinit var txttvPerm1: TextView
+    private lateinit var txttvPerm2: TextView
+
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            AutoNextToolTheme {
-                Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+        setContentView(R.layout.activity_main)
+
+        val tvCount = findViewById<TextView>(R.id.tvCount)
+        val btnMinus = findViewById<ImageView>(R.id.btnMinus)
+        val btnPlus = findViewById<ImageView>(R.id.btnPlus)
+        val seekBar = findViewById<SeekBar>(R.id.seekBar)
+        val tvDescription = findViewById<TextView>(R.id.tvDescription)
+        val imvSetting1 = findViewById<ImageView>(R.id.ivSettings1)
+        val imvSetting2 = findViewById<ImageView>(R.id.ivSettings2)
+        txttvPerm1 = findViewById<TextView>(R.id.tvPerm1)
+        txttvPerm2 = findViewById<TextView>(R.id.tvPerm2)
+        val bntstart = findViewById<AppCompatButton>(R.id.btnStart)
+        check( )
+        findViewById<AppCompatButton>(R.id.btnStart).setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                requestOverlayPermission()
+            } else {
+                startService(Intent(this@MainActivity, FloatingWidgetService::class.java))
+                moveTaskToBack(true)
             }
         }
+
+        var timerValue = getValue()
+
+        fun updateUI() {
+            tvCount.text = timerValue.toString()
+            seekBar.progress = timerValue - 1
+            tvDescription.text = "Automatically swipe the screen every $timerValue seconds."
+        }
+        imvSetting1.setOnClickListener({
+            requestOverlayPermission()
+        })
+        imvSetting2.setOnClickListener({
+            if (!isAccessibilityServiceEnabled(this, MainActivity::class.java)) {
+                openAccessibilitySettings()
+            }
+        })
+
+        btnMinus.setOnClickListener {
+            if (timerValue > 5) {
+                timerValue--
+                saveValue(timerValue)
+                updateUI()
+            }
+        }
+
+        btnPlus.setOnClickListener {
+            if (timerValue < 60) {
+                timerValue++
+                saveValue(timerValue)
+                updateUI()
+            }
+        }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    timerValue = progress + 1
+                    updateUI()
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        updateUI()
     }
-}
+    override fun onResume() {
+        super.onResume()
+        check( )
+    }
+    fun requestOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
+                startActivity(intent)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AutoNextToolTheme {
-        Greeting("Android")
+        }
+    }
+
+    fun openAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        startActivity(intent)
+    }
+
+    fun isAccessibilityServiceEnabled(context: Context, service: Class<*>): Boolean {
+        val expectedComponentName = "${context.packageName}/${service.name}"
+        val enabledServices = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: return false
+
+        return enabledServices.contains(expectedComponentName)
+    }
+
+
+    fun check() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(this)) {
+
+                txttvPerm1.setTextColor(Color.GREEN)
+            } else {
+
+                txttvPerm1.setTextColor(Color.RED)
+            }
+        } else {
+            // Android < 6 thì mặc định là có quyền
+            txttvPerm1.setTextColor(Color.GREEN)
+        }
+
+        if (!isAccessibilityServiceEnabled(this, MyAccessibilityService::class.java)){
+            Log.d(TAG, "isAccessibilityServiceEnabled: = false")
+            txttvPerm2.setTextColor(Color.RED);
+        }
+        else {
+            Log.d(TAG, "isAccessibilityServiceEnabled: = true")
+            txttvPerm2.setTextColor(Color.GREEN);
+        }
+    }
+    fun saveValue(value: Int) {
+            val sharedPref = getSharedPreferences("MyApp", MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("my_number", value)
+        editor.apply()
+    }
+
+    fun getValue(): Int {
+        val sharedPref = getSharedPreferences("MyApp", MODE_PRIVATE)
+        return sharedPref.getInt("my_number", 15) // 0 là default
     }
 }

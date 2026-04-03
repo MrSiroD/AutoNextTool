@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_floating_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- Expanded State -->
+    <LinearLayout
+        android:id="@+id/layout_expanded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:padding="8dp">
+
+        <!-- Counter Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/btnMinusFloating"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/circle_border"
+                android:padding="6dp"
+                android:src="@drawable/ic_minus" />
+
+            <TextView
+                android:id="@+id/tvCountFloating"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="10"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/btnPlusFloating"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/circle_border"
+                android:padding="6dp"
+                android:src="@drawable/ic_plus" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="#E0E0E0" />
+
+        <!-- Actions Row -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <LinearLayout
+                android:id="@+id/btnStartFloating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_play_floating" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Start"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnSettingsFloating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_gear" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Setting"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnMinimizeFloating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="4dp"
+                    android:src="@drawable/minimize" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Minimize"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Minimized State -->
+    <RelativeLayout
+        android:id="@+id/layout_minimized"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivHandPointer"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_margin="0dp"
+            android:padding="5dp"
+            android:src="@drawable/point" />
+
+        <ImageView
+            android:id="@+id/btnCloseMinimized"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignEnd="@id/ivHandPointer"
+            android:layout_alignTop="@id/ivHandPointer"
+            android:layout_margin="0dp"
+            android:elevation="4dp"
+            android:src="@drawable/ic_close_pink" />
+    </RelativeLayout>
+
+</FrameLayout>
