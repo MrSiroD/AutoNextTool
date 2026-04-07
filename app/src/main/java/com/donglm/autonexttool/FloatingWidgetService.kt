@@ -25,12 +25,14 @@ class FloatingWidgetService : Service() {
     private lateinit var tvCountFloating: TextView
     private val handler = Handler(Looper.getMainLooper())
     private var swipeRunnable: Runnable? = null
+    private var swipeAnim: android.animation.ValueAnimator? = null
 
     private fun startSwiping() {
         val interval = getValue() * 1000L
         swipeRunnable = object : Runnable {
             override fun run() {
-                MyAccessibilityService.instance?.swipeUp()
+                swipeAnim?.start()
+                MyAccessibilityService.instance?.performSwipe()
                 handler.postDelayed(this, interval)
             }
         }
@@ -104,16 +106,52 @@ class FloatingWidgetService : Service() {
             }
         }
 
-        val rotateAnim = android.animation.ObjectAnimator.ofFloat(ivHandPointer, "rotation", 0f, 360f).apply {
-            duration = 1500
-            repeatCount = android.animation.ObjectAnimator.INFINITE
-            interpolator = android.view.animation.LinearInterpolator()
-        }
-
         btnStart.setOnClickListener {
             layoutExpanded.visibility = View.GONE
             layoutMinimized.visibility = View.VISIBLE
-            rotateAnim.start()
+            
+            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+            val direction = sharedPref.getInt("swipe_direction", 0)
+
+            val moveDistance = 60f
+            when (direction) {
+                0 -> ivHandPointer.rotation = 0f
+                1 -> ivHandPointer.rotation = 180f
+                2 -> ivHandPointer.rotation = 270f
+                3 -> ivHandPointer.rotation = 90f
+            }
+
+            swipeAnim = android.animation.ValueAnimator.ofFloat(0f, 1f).apply {
+                duration = 1000
+                interpolator = android.view.animation.LinearInterpolator()
+                addUpdateListener { animator ->
+                    val fraction = animator.animatedFraction
+                    val progressDistance = fraction * moveDistance
+                    
+                    val alpha = when {
+                        fraction < 0.2f -> fraction / 0.2f
+                        fraction > 0.8f -> (1f - fraction) / 0.2f
+                        else -> 1f
+                    }
+                    ivHandPointer.alpha = alpha
+
+                    when (direction) {
+                        0 -> ivHandPointer.translationY = -progressDistance
+                        1 -> ivHandPointer.translationY = progressDistance
+                        2 -> ivHandPointer.translationX = -progressDistance
+                        3 -> ivHandPointer.translationX = progressDistance
+                    }
+                }
+                addListener(object : android.animation.AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: android.animation.Animator) {
+                        super.onAnimationEnd(animation)
+                        ivHandPointer.alpha = 1f
+                        ivHandPointer.translationX = 0f
+                        ivHandPointer.translationY = 0f
+                    }
+                })
+            }
+            
             startSwiping()
             Toast.makeText(this@FloatingWidgetService, "Auto Swipe Started", Toast.LENGTH_SHORT).show()
         }
@@ -128,13 +166,25 @@ class FloatingWidgetService : Service() {
         btnMinimize.setOnClickListener {
             layoutExpanded.visibility = View.GONE
             layoutMinimized.visibility = View.VISIBLE
+            ivHandPointer.alpha = 1f
+            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+            val direction = sharedPref.getInt("swipe_direction", 0)
+            when (direction) {
+                0 -> ivHandPointer.rotation = 0f
+                1 -> ivHandPointer.rotation = 180f
+                2 -> ivHandPointer.rotation = 270f
+                3 -> ivHandPointer.rotation = 90f
+            }
         }
 
         ivHandPointer.setOnClickListener {
             layoutExpanded.visibility = View.VISIBLE
             layoutMinimized.visibility = View.GONE
-            rotateAnim.cancel()
+            swipeAnim?.cancel()
+            ivHandPointer.translationX = 0f
+            ivHandPointer.translationY = 0f
             ivHandPointer.rotation = 0f
+            ivHandPointer.alpha = 1f
             stopSwiping()
         }
 

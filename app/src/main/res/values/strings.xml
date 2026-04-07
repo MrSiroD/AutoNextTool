@@ -7,4 +7,12 @@
     <string name="let_start">LET START!</string>
     <string name="rate_me">RATE ME</string>
     <string name="auto_next_tiktool">Auto Next TikTool</string>
+    <string name="swipe_direction">Swipe Direction:</string>
+    <string-array name="swipe_directions">
+        <item>Swipe Up</item>
+        <item>Swipe Down</item>
+        <item>Swipe Left</item>
+        <item>Swipe Right</item>
+    </string-array>
+    <string name="enable_double_click">Double click center screen 2s after swipe</string>
 </resources>

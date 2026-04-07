@@ -139,26 +139,32 @@
     <!-- Minimized State -->
     <RelativeLayout
         android:id="@+id/layout_minimized"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="10dp"
 
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivHandPointer"
-            android:layout_width="wrap_content"
+            android:layout_width="72dp"
             android:layout_height="56dp"
-            android:layout_margin="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:maxWidth="50dp"
             android:padding="5dp"
-            android:src="@drawable/point" />
+            android:src="@drawable/arrow_up" />
 
         <ImageView
             android:id="@+id/btnCloseMinimized"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignEnd="@id/ivHandPointer"
             android:layout_alignTop="@id/ivHandPointer"
+            android:layout_alignEnd="@id/ivHandPointer"
             android:layout_margin="0dp"
             android:elevation="4dp"
             android:src="@drawable/ic_close_pink" />

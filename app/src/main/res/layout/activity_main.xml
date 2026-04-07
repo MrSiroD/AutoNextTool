@@ -91,6 +91,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
+    <LinearLayout
+        android:id="@+id/llSwipeDirection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/swipe_direction"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinnerDirection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:entries="@array/swipe_directions" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tvPermissionsLabel"
         android:layout_width="0dp"
@@ -103,7 +131,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+        app:layout_constraintTop_toBottomOf="@id/llSwipeDirection" />
 
     <TextView
         android:id="@+id/tvPerm1"
