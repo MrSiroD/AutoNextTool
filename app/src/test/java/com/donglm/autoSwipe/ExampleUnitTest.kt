@@ -1,4 +1,4 @@
-package com.donglm.autonexttool
+package com.donglm.autoSwipe
 
 import org.junit.Test
 

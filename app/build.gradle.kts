@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace = "com.donglm.autonexttool"
+    namespace = "com.donglm.autoSwipe"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.donglm.autonexttool"
+        applicationId = "com.donglm.autoSwipe"
         minSdk = 32
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

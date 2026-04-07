@@ -1,4 +1,4 @@
-package com.donglm.autonexttool.ui.theme
+package com.donglm.autoSwipe.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

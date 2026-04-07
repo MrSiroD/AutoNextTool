@@ -1,12 +1,12 @@
-package com.donglm.autonexttool
+package com.donglm.autoSwipe
 
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
-import android.os.IBinder
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -14,9 +14,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.donglm.autoSwipe.R
 
 class FloatingWidgetService : Service() {
 
@@ -33,6 +33,15 @@ class FloatingWidgetService : Service() {
             override fun run() {
                 swipeAnim?.start()
                 MyAccessibilityService.instance?.performSwipe()
+                
+                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                val isDoubleClickEnabled = sharedPref.getBoolean("enable_double_click", false)
+                if (isDoubleClickEnabled) {
+                    handler.postDelayed({
+                        MyAccessibilityService.instance?.performDoubleClick()
+                    }, 2000L)
+                }
+                
                 handler.postDelayed(this, interval)
             }
         }
@@ -82,6 +91,11 @@ class FloatingWidgetService : Service() {
         val btnStart = floatingView.findViewById<View>(R.id.btnStartFloating)
         val btnSettings = floatingView.findViewById<View>(R.id.btnSettingsFloating)
         val btnMinimize = floatingView.findViewById<View>(R.id.btnMinimizeFloating)
+        val btnChangeDirectionFloating = floatingView.findViewById<View>(R.id.btnChangeDirectionFloating)
+        val ivChangeDirectionFloating = floatingView.findViewById<ImageView>(R.id.ivChangeDirectionFloating)
+        val btnToggleDoubleClick = floatingView.findViewById<View>(R.id.btnToggleDoubleClick)
+        val ivDoubleClickFloating = floatingView.findViewById<ImageView>(R.id.ivDoubleClickFloating)
+        val btnCloseExpanded = floatingView.findViewById<View>(R.id.btnCloseExpanded)
         val ivHandPointer = floatingView.findViewById<View>(R.id.ivHandPointer)
         val btnCloseMinimized = floatingView.findViewById<View>(R.id.btnCloseMinimized)
         tvCountFloating = floatingView.findViewById(R.id.tvCountFloating)
@@ -160,6 +174,42 @@ class FloatingWidgetService : Service() {
             val intent = Intent(this@FloatingWidgetService, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            stopSelf()
+        }
+
+        fun updateExtraToggles() {
+            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+            val dir = sharedPref.getInt("swipe_direction", 0)
+            when (dir) {
+                0 -> ivChangeDirectionFloating.rotation = 0f
+                1 -> ivChangeDirectionFloating.rotation = 180f
+                2 -> ivChangeDirectionFloating.rotation = 270f
+                3 -> ivChangeDirectionFloating.rotation = 90f
+            }
+            val isDouble = sharedPref.getBoolean("enable_double_click", false)
+            ivDoubleClickFloating.alpha = if (isDouble) 1f else 0.3f
+        }
+        updateExtraToggles()
+
+        btnChangeDirectionFloating.setOnClickListener {
+            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+            val dir = sharedPref.getInt("swipe_direction", 0)
+            val nextDir = (dir + 1) % 4
+            sharedPref.edit().putInt("swipe_direction", nextDir).apply()
+            updateExtraToggles()
+            Toast.makeText(this@FloatingWidgetService, "Direction set: " + when(nextDir){0->"Up";1->"Down";2->"Left";else->"Right"}, Toast.LENGTH_SHORT).show()
+        }
+
+        btnToggleDoubleClick.setOnClickListener {
+            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+            val isDouble = sharedPref.getBoolean("enable_double_click", false)
+            sharedPref.edit().putBoolean("enable_double_click", !isDouble).apply()
+            updateExtraToggles()
+            Toast.makeText(this@FloatingWidgetService, "Double click " + (if (!isDouble) "enabled" else "disabled"), Toast.LENGTH_SHORT).show()
+        }
+
+        btnCloseExpanded.setOnClickListener {
+            stopSwiping()
             stopSelf()
         }
 

@@ -1,24 +1,24 @@
-package com.donglm.autonexttool
+package com.donglm.autoSwipe
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Spinner
 import android.view.View
 import android.widget.AdapterView
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.AppCompatButton
+import com.donglm.autoSwipe.R
 
 
 class MainActivity : ComponentActivity() {
@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
         val seekBar = findViewById<SeekBar>(R.id.seekBar)
         val tvDescription = findViewById<TextView>(R.id.tvDescription)
         val spinnerDirection = findViewById<Spinner>(R.id.spinnerDirection)
+        val cbDoubleClick = findViewById<CheckBox>(R.id.cbDoubleClick)
         val imvSetting1 = findViewById<ImageView>(R.id.ivSettings1)
         val imvSetting2 = findViewById<ImageView>(R.id.ivSettings2)
         txttvPerm1 = findViewById<TextView>(R.id.tvPerm1)
@@ -111,8 +112,35 @@ class MainActivity : ComponentActivity() {
 
         val sharedPref = getSharedPreferences("MyApp", MODE_PRIVATE)
         val savedDirection = sharedPref.getInt("swipe_direction", 0)
-        spinnerDirection.setSelection(savedDirection)
 
+        val directions = resources.getStringArray(R.array.swipe_directions)
+        val adapter = object : android.widget.ArrayAdapter<String>(this, R.layout.layout_spinner_item, R.id.tvSpinnerText, directions) {
+            override fun getView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val ivIcon = view.findViewById<ImageView>(R.id.ivSpinnerIcon)
+                when (position) {
+                    0 -> ivIcon.rotation = 0f
+                    1 -> ivIcon.rotation = 180f
+                    2 -> ivIcon.rotation = 270f
+                    3 -> ivIcon.rotation = 90f
+                }
+                return view
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val ivIcon = view.findViewById<ImageView>(R.id.ivSpinnerIcon)
+                when (position) {
+                    0 -> ivIcon.rotation = 0f
+                    1 -> ivIcon.rotation = 180f
+                    2 -> ivIcon.rotation = 270f
+                    3 -> ivIcon.rotation = 90f
+                }
+                return view
+            }
+        }
+        spinnerDirection.adapter = adapter
+        spinnerDirection.setSelection(savedDirection)
         spinnerDirection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val editor = sharedPref.edit()
@@ -122,11 +150,23 @@ class MainActivity : ComponentActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
+        cbDoubleClick.isChecked = sharedPref.getBoolean("enable_double_click", false)
+        cbDoubleClick.setOnCheckedChangeListener { _, isChecked ->
+            val editor = sharedPref.edit()
+            editor.putBoolean("enable_double_click", isChecked)
+            editor.apply()
+        }
+
         updateUI()
     }
     override fun onResume() {
         super.onResume()
         check( )
+        val sharedPref = getSharedPreferences("MyApp", MODE_PRIVATE)
+        val spinnerDirection = findViewById<android.widget.Spinner>(R.id.spinnerDirection)
+        val cbDoubleClick = findViewById<android.widget.CheckBox>(R.id.cbDoubleClick)
+        spinnerDirection.setSelection(sharedPref.getInt("swipe_direction", 0))
+        cbDoubleClick.isChecked = sharedPref.getBoolean("enable_double_click", false)
     }
     fun requestOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

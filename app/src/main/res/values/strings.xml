@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">AutoNextTool</string>
+    <string name="app_name">Auto Swipe</string>
     <string name="to_start_please_allow_2_permissions_below">To Start, please allow 2 permissions below:</string>
     <string name="automatically_swipe_the_screen_every_15_seconds">Automatically swipe the screen every 15 seconds.</string>
     <string name="_1_appear_on_top">1: Appear on top.</string>
     <string name="_2_accessibility_service">2: Accessibility Service.</string>
     <string name="let_start">LET START!</string>
     <string name="rate_me">RATE ME</string>
-    <string name="auto_next_tiktool">Auto Next TikTool</string>
+    <string name="auto_next_tiktool">Auto Swipe</string>
     <string name="swipe_direction">Swipe Direction:</string>
     <string-array name="swipe_directions">
         <item>Swipe Up</item>

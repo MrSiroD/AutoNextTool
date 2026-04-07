@@ -1,4 +1,4 @@
-package com.donglm.autonexttool;
+package com.donglm.autoSwipe;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
@@ -76,6 +76,26 @@ public class MyAccessibilityService extends AccessibilityService {
                 }
             }, null);
             android.util.Log.d("donglm", "dispatchGesture returned " + result);
+        }
+    }
+
+    public void performDoubleClick() {
+        android.util.Log.d("donglm", "performDoubleClick called");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            DisplayMetrics displayMetrics = android.content.res.Resources.getSystem().getDisplayMetrics();
+            int screenWidth = displayMetrics.widthPixels;
+            int screenHeight = displayMetrics.heightPixels;
+
+            Path clickPath = new Path();
+            clickPath.moveTo(screenWidth / 2f, screenHeight / 2f);
+
+            GestureDescription.Builder gestureBuilder = new GestureDescription.Builder();
+            GestureDescription.StrokeDescription stroke1 = new GestureDescription.StrokeDescription(clickPath, 0, 50);
+            GestureDescription.StrokeDescription stroke2 = new GestureDescription.StrokeDescription(clickPath, 100, 50);
+            gestureBuilder.addStroke(stroke1);
+            gestureBuilder.addStroke(stroke2);
+
+            dispatchGesture(gestureBuilder.build(), null, null);
         }
     }
 }
