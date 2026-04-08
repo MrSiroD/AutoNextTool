@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Tự động vuốt</string>
+    <string name="to_start_please_allow_2_permissions_below">Để bắt đầu, vui lòng cho phép 2 quyền dưới đây:</string>
+    <string name="automatically_swipe_the_screen_every_x_seconds">Tự động vuốt màn hình mỗi %d giây.</string>
+    <string name="_1_appear_on_top">1: Hiển thị trên cùng.</string>
+    <string name="_2_accessibility_service">2: Quyền truy cập.</string>
+    <string name="let_start">BẮT ĐẦU!</string>
+    <string name="rate_me">ĐÁNH GIÁ</string>
+    <string name="auto_next_tiktool">Tự động vuốt</string>
+    <string name="swipe_direction">Hướng vuốt:</string>
+    <string-array name="swipe_directions">
+        <item>Vuốt Lên</item>
+        <item>Vuốt Xuống</item>
+        <item>Vuốt Trái</item>
+        <item>Vuốt Phải</item>
+    </string-array>
+    <string name="enable_double_click">Nhấn đúp giữa màn hình sau 2s vuốt</string>
+    <string name="automatically_swipe_the_screen_every_15_seconds">Tự động vuốt màn hình mỗi 15 giây.</string>
+
+    <string name="grant_appear_on_top_title">Cấp quyền hiển thị trên cùng</string>
+    <string name="grant_appear_on_top_msg">Ứng dụng cần quyền hiển thị trên cùng để hiển thị menu trên màn hình.</string>
+    <string name="open_settings">Mở Cài đặt</string>
+    <string name="cancel">Hủy</string>
+
+    <string name="grant_accessibility_title">Cấp quyền truy cập</string>
+    <string name="grant_accessibility_msg">Ứng dụng cần Quyền truy cập để tự động vuốt màn hình. Vui lòng nhấn \'Mở cài đặt\' và bật Tự động vuốt.</string>
+
+    <string name="auto_swipe_started">Đã bắt đầu tự động vuốt</string>
+    <string name="direction_up">Lên</string>
+    <string name="direction_down">Xuống</string>
+    <string name="direction_left">Trái</string>
+    <string name="direction_right">Phải</string>
+    <string name="direction_set">Đã chọn hướng: %s</string>
+    <string name="double_click_enabled">Đã bật nhấn đúp</string>
+    <string name="double_click_disabled">Đã tắt nhấn đúp</string>
+</resources>

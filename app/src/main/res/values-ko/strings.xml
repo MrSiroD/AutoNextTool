@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">자동 스와이프</string>
+    <string name="to_start_please_allow_2_permissions_below">시작하려면 아래의 두 가지 권한을 허용하십시오:</string>
+    <string name="automatically_swipe_the_screen_every_x_seconds">%d초마다 화면을 자동으로 스와이프합니다.</string>
+    <string name="_1_appear_on_top">1: 다른 앱 위에 표시.</string>
+    <string name="_2_accessibility_service">2: 접근성 서비스.</string>
+    <string name="let_start">시작!</string>
+    <string name="rate_me">평가하기</string>
+    <string name="auto_next_tiktool">자동 스와이프</string>
+    <string name="swipe_direction">스와이프 방향:</string>
+    <string-array name="swipe_directions">
+        <item>위로 스와이프</item>
+        <item>아래로 스와이프</item>
+        <item>왼쪽으로 스와이프</item>
+        <item>오른쪽으로 스와이프</item>
+    </string-array>
+    <string name="enable_double_click">스와이프 2초 후 화면 중앙 두 번 탭하기</string>
+
+    <string name="grant_appear_on_top_title">다른 앱 위에 표시 권한 허용</string>
+    <string name="grant_appear_on_top_msg">메뉴를 화면 위에 표시하려면 다른 앱 위에 표시 권한이 필요합니다.</string>
+    <string name="open_settings">설정 열기</string>
+    <string name="cancel">취소</string>
+
+    <string name="grant_accessibility_title">접근성 권한 허용</string>
+    <string name="grant_accessibility_msg">자동으로 화면을 스와이프하려면 접근성 권한이 필요합니다. \'설정 열기\'를 탭하고 자동 스와이프를 활성화하십시오.</string>
+
+    <string name="auto_swipe_started">자동 스와이프 시작됨</string>
+    <string name="direction_up">위</string>
+    <string name="direction_down">아래</string>
+    <string name="direction_left">왼쪽</string>
+    <string name="direction_right">오른쪽</string>
+    <string name="direction_set">설정된 방향: %s</string>
+    <string name="double_click_enabled">두 번 탭하기 활성화됨</string>
+    <string name="double_click_disabled">두 번 탭하기 비활성화됨</string>
+</resources>

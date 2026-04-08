@@ -50,15 +50,24 @@ class MainActivity : ComponentActivity() {
             val hasAccessibility = isAccessibilityServiceEnabled(this, MyAccessibilityService::class.java)
 
             if (!hasOverlay) {
-                requestOverlayPermission()
+
+                android.app.AlertDialog.Builder(this@MainActivity)
+                    .setTitle(getString(R.string.grant_appear_on_top_title))
+                    .setMessage(getString(R.string.grant_appear_on_top_msg))
+                    .setPositiveButton(getString(R.string.open_settings)) { _, _ ->
+                        requestOverlayPermission()
+                    }
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .show()
+
             } else if (!hasAccessibility) {
                 android.app.AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Grant Accessibility Permission")
-                    .setMessage("The App needs Accessibility Permission to automatically swipe the screen. Please click 'Open Settings' and enable AutoNextTool.")
-                    .setPositiveButton("Open Settings") { _, _ ->
+                    .setTitle(getString(R.string.grant_accessibility_title))
+                    .setMessage(getString(R.string.grant_accessibility_msg))
+                    .setPositiveButton(getString(R.string.open_settings)) { _, _ ->
                         openAccessibilitySettings()
                     }
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(getString(R.string.cancel), null)
                     .show()
             } else {
                 startService(Intent(this@MainActivity, FloatingWidgetService::class.java))
@@ -71,7 +80,7 @@ class MainActivity : ComponentActivity() {
         fun updateUI() {
             tvCount.text = timerValue.toString()
             seekBar.progress = timerValue - 1
-            tvDescription.text = "Automatically swipe the screen every $timerValue seconds."
+            tvDescription.text = getString(R.string.automatically_swipe_the_screen_every_x_seconds, timerValue)
         }
         imvSetting1.setOnClickListener({
             requestOverlayPermission()

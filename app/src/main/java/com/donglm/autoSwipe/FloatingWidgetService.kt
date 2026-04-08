@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -16,6 +17,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.postDelayed
 import com.donglm.autoSwipe.R
 
 class FloatingWidgetService : Service() {
@@ -23,29 +25,80 @@ class FloatingWidgetService : Service() {
     private lateinit var windowManager: WindowManager
     private lateinit var floatingView: View
     private lateinit var tvCountFloating: TextView
+    private lateinit var layoutExpanded: View
+    private lateinit var layoutMinimized: View
+    private lateinit var ivHandPointer: ImageView
     private val handler = Handler(Looper.getMainLooper())
     private var swipeRunnable: Runnable? = null
     private var swipeAnim: android.animation.ValueAnimator? = null
+    private var screenOffReceiver: android.content.BroadcastReceiver? = null
+
+    private val permissionCheckRunnable = object : Runnable {
+        override fun run() {
+            val hasOverlay = Build.VERSION.SDK_INT < Build.VERSION_CODES.M || android.provider.Settings.canDrawOverlays(this@FloatingWidgetService)
+            val hasAccessibility = MyAccessibilityService.instance != null
+            if (!hasOverlay || !hasAccessibility) {
+                stopSwipingAndResetUI()
+            }
+            handler.postDelayed(this, 1000)
+        }
+    }
+
+    private fun stopSwipingAndResetUI() {
+        if (!::layoutExpanded.isInitialized) return
+        if (layoutMinimized.visibility == View.VISIBLE) {
+            layoutExpanded.visibility = View.VISIBLE
+            layoutMinimized.visibility = View.GONE
+            swipeAnim?.cancel()
+            ivHandPointer.translationX = 0f
+            ivHandPointer.translationY = 0f
+            ivHandPointer.rotation = 0f
+            ivHandPointer.alpha = 1f
+            ivHandPointer.setImageResource(R.drawable.arrow_red)
+            ivHandPointer.clearColorFilter()
+            stopSwiping()
+        }
+    }
 
     private fun startSwiping() {
         val interval = getValue() * 1000L
+
         swipeRunnable = object : Runnable {
             override fun run() {
+                handler.postDelayed(this, interval)
                 swipeAnim?.start()
                 MyAccessibilityService.instance?.performSwipe()
-                
                 val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
                 val isDoubleClickEnabled = sharedPref.getBoolean("enable_double_click", false)
                 if (isDoubleClickEnabled) {
                     handler.postDelayed({
                         MyAccessibilityService.instance?.performDoubleClick()
+                        
+                        // Change icon to double_tap
+                        ivHandPointer.setImageResource(R.drawable.double_tap)
+                        
+                        // Double click animation (scale down and up twice)
+                        val clickAnim = android.animation.ObjectAnimator.ofPropertyValuesHolder(
+                            ivHandPointer,
+                            android.animation.PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 0.8f, 1f, 0.8f, 1f),
+                            android.animation.PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 0.8f, 1f, 0.8f, 1f)
+                        )
+                        clickAnim.duration = 500
+                        clickAnim.start()
+                        
+                        // Revert to arrow_green after 0.5s (500ms)
+                        handler.postDelayed({
+                            if (layoutMinimized.visibility == View.VISIBLE) {
+                                ivHandPointer.setImageResource(R.drawable.arrow_green)
+                            }
+                        }, 500L)
                     }, 2000L)
                 }
                 
-                handler.postDelayed(this, interval)
+
             }
         }
-        handler.post(swipeRunnable!!)
+        handler.postDelayed(swipeRunnable!!, 2000)
     }
 
     private fun stopSwiping() {
@@ -59,6 +112,18 @@ class FloatingWidgetService : Service() {
     override fun onCreate() {
         super.onCreate()
         
+        screenOffReceiver = object : android.content.BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == Intent.ACTION_SCREEN_OFF) {
+                    stopSwipingAndResetUI()
+                }
+            }
+        }
+        val filter = android.content.IntentFilter(Intent.ACTION_SCREEN_OFF)
+        registerReceiver(screenOffReceiver, filter)
+        
+        handler.post(permissionCheckRunnable)
+
         floatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null)
 
         val layoutFlag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -83,8 +148,8 @@ class FloatingWidgetService : Service() {
         windowManager.addView(floatingView, params)
 
         val rootLayout = floatingView.findViewById<View>(R.id.root_floating_layout)
-        val layoutExpanded = floatingView.findViewById<View>(R.id.layout_expanded)
-        val layoutMinimized = floatingView.findViewById<View>(R.id.layout_minimized)
+        layoutExpanded = floatingView.findViewById<View>(R.id.layout_expanded)
+        layoutMinimized = floatingView.findViewById<View>(R.id.layout_minimized)
         
         val btnMinus = floatingView.findViewById<ImageView>(R.id.btnMinusFloating)
         val btnPlus = floatingView.findViewById<ImageView>(R.id.btnPlusFloating)
@@ -96,7 +161,7 @@ class FloatingWidgetService : Service() {
         val btnToggleDoubleClick = floatingView.findViewById<View>(R.id.btnToggleDoubleClick)
         val ivDoubleClickFloating = floatingView.findViewById<ImageView>(R.id.ivDoubleClickFloating)
         val btnCloseExpanded = floatingView.findViewById<View>(R.id.btnCloseExpanded)
-        val ivHandPointer = floatingView.findViewById<View>(R.id.ivHandPointer)
+        ivHandPointer = floatingView.findViewById<ImageView>(R.id.ivHandPointer)
         val btnCloseMinimized = floatingView.findViewById<View>(R.id.btnCloseMinimized)
         tvCountFloating = floatingView.findViewById(R.id.tvCountFloating)
 
@@ -134,6 +199,8 @@ class FloatingWidgetService : Service() {
                 2 -> ivHandPointer.rotation = 270f
                 3 -> ivHandPointer.rotation = 90f
             }
+            ivHandPointer.setImageResource(R.drawable.arrow_green)
+            ivHandPointer.clearColorFilter()
 
             swipeAnim = android.animation.ValueAnimator.ofFloat(0f, 1f).apply {
                 duration = 1000
@@ -167,7 +234,7 @@ class FloatingWidgetService : Service() {
             }
             
             startSwiping()
-            Toast.makeText(this@FloatingWidgetService, "Auto Swipe Started", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@FloatingWidgetService, getString(R.string.auto_swipe_started), Toast.LENGTH_SHORT).show()
         }
 
         btnSettings.setOnClickListener {
@@ -197,7 +264,13 @@ class FloatingWidgetService : Service() {
             val nextDir = (dir + 1) % 4
             sharedPref.edit().putInt("swipe_direction", nextDir).apply()
             updateExtraToggles()
-            Toast.makeText(this@FloatingWidgetService, "Direction set: " + when(nextDir){0->"Up";1->"Down";2->"Left";else->"Right"}, Toast.LENGTH_SHORT).show()
+            val dirStr = when(nextDir){
+                0 -> getString(R.string.direction_up)
+                1 -> getString(R.string.direction_down)
+                2 -> getString(R.string.direction_left)
+                else -> getString(R.string.direction_right)
+            }
+            Toast.makeText(this@FloatingWidgetService, getString(R.string.direction_set, dirStr), Toast.LENGTH_SHORT).show()
         }
 
         btnToggleDoubleClick.setOnClickListener {
@@ -205,7 +278,8 @@ class FloatingWidgetService : Service() {
             val isDouble = sharedPref.getBoolean("enable_double_click", false)
             sharedPref.edit().putBoolean("enable_double_click", !isDouble).apply()
             updateExtraToggles()
-            Toast.makeText(this@FloatingWidgetService, "Double click " + (if (!isDouble) "enabled" else "disabled"), Toast.LENGTH_SHORT).show()
+            val msg = if (!isDouble) getString(R.string.double_click_enabled) else getString(R.string.double_click_disabled)
+            Toast.makeText(this@FloatingWidgetService, msg, Toast.LENGTH_SHORT).show()
         }
 
         btnCloseExpanded.setOnClickListener {
@@ -225,17 +299,12 @@ class FloatingWidgetService : Service() {
                 2 -> ivHandPointer.rotation = 270f
                 3 -> ivHandPointer.rotation = 90f
             }
+            ivHandPointer.setImageResource(R.drawable.arrow_red)
+            ivHandPointer.clearColorFilter()
         }
 
         ivHandPointer.setOnClickListener {
-            layoutExpanded.visibility = View.VISIBLE
-            layoutMinimized.visibility = View.GONE
-            swipeAnim?.cancel()
-            ivHandPointer.translationX = 0f
-            ivHandPointer.translationY = 0f
-            ivHandPointer.rotation = 0f
-            ivHandPointer.alpha = 1f
-            stopSwiping()
+            stopSwipingAndResetUI()
         }
 
         btnCloseMinimized.setOnClickListener {
@@ -301,6 +370,8 @@ class FloatingWidgetService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopSwiping()
+        handler.removeCallbacks(permissionCheckRunnable)
+        screenOffReceiver?.let { unregisterReceiver(it) }
         if (::floatingView.isInitialized) {
             windowManager.removeView(floatingView)
         }

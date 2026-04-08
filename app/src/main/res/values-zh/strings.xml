@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">自动滑动</string>
+    <string name="to_start_please_allow_2_permissions_below">为了开始，请允许以下两个权限：</string>
+    <string name="automatically_swipe_the_screen_every_x_seconds">每 %d 秒自动滑动屏幕。</string>
+    <string name="_1_appear_on_top">1：悬浮窗权限。</string>
+    <string name="_2_accessibility_service">2：无障碍服务。</string>
+    <string name="let_start">开始！</string>
+    <string name="rate_me">评价</string>
+    <string name="auto_next_tiktool">自动滑动</string>
+    <string name="swipe_direction">滑动方向：</string>
+    <string-array name="swipe_directions">
+        <item>向上滑动</item>
+        <item>向下滑动</item>
+        <item>向左滑动</item>
+        <item>向右滑动</item>
+    </string-array>
+    <string name="enable_double_click">滑动2秒后双击屏幕中央</string>
+    
+    <string name="grant_appear_on_top_title">允许悬浮窗</string>
+    <string name="grant_appear_on_top_msg">应用需要悬浮窗权限，以便在屏幕顶部显示菜单。</string>
+    <string name="open_settings">打开设置</string>
+    <string name="cancel">取消</string>
+
+    <string name="grant_accessibility_title">允许无障碍服务</string>
+    <string name="grant_accessibility_msg">应用需要无障碍服务才能自动滑动屏幕。请点击“打开设置”并启用自动滑动。</string>
+
+    <string name="auto_swipe_started">已开始自动滑动</string>
+    <string name="direction_up">向上</string>
+    <string name="direction_down">向下</string>
+    <string name="direction_left">向左</string>
+    <string name="direction_right">向右</string>
+    <string name="direction_set">已设置方向：%s</string>
+    <string name="double_click_enabled">已开启双击</string>
+    <string name="double_click_disabled">已关闭双击</string>
+</resources>

@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Auto Swipe</string>
+    <string name="app_name">Automatic Swipe</string>
     <string name="to_start_please_allow_2_permissions_below">To Start, please allow 2 permissions below:</string>
     <string name="automatically_swipe_the_screen_every_15_seconds">Automatically swipe the screen every 15 seconds.</string>
     <string name="_1_appear_on_top">1: Appear on top.</string>
     <string name="_2_accessibility_service">2: Accessibility Service.</string>
     <string name="let_start">LET START!</string>
     <string name="rate_me">RATE ME</string>
-    <string name="auto_next_tiktool">Auto Swipe</string>
+    <string name="auto_next_tiktool">Automatic Swipe</string>
     <string name="swipe_direction">Swipe Direction:</string>
     <string-array name="swipe_directions">
         <item>Swipe Up</item>
@@ -15,4 +15,22 @@
         <item>Swipe Right</item>
     </string-array>
     <string name="enable_double_click">Double click center screen 2s after swipe</string>
+
+    <string name="automatically_swipe_the_screen_every_x_seconds">Automatically swipe the screen every %d seconds.</string>
+    <string name="grant_appear_on_top_title">Grant appear on top permission</string>
+    <string name="grant_appear_on_top_msg">The App needs appear on top permission to show menu on top screen.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="grant_accessibility_title">Grant Accessibility Permission</string>
+    <string name="grant_accessibility_msg">The App needs Accessibility Permission to automatically swipe the screen. Please click \'Open Settings\' and enable Automatic Swipe.</string>
+
+    <string name="auto_swipe_started">Auto Swipe Started</string>
+    <string name="direction_up">Up</string>
+    <string name="direction_down">Down</string>
+    <string name="direction_left">Left</string>
+    <string name="direction_right">Right</string>
+    <string name="direction_set">Direction set: %s</string>
+    <string name="double_click_enabled">Double click enabled</string>
+    <string name="double_click_disabled">Double click disabled</string>
 </resources>

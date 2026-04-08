@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ऑटो वाइप</string>
+    <string name="to_start_please_allow_2_permissions_below">शुरू करने के लिए, कृपया नीचे दी गई 2 अनुमतियों की अनुमति दें:</string>
+    <string name="automatically_swipe_the_screen_every_x_seconds">हर %d सेकंड में स्क्रीन को स्वचालित रूप से स्वाइप करें।</string>
+    <string name="_1_appear_on_top">1: अन्य ऐप्स के ऊपर दिखाएं।</string>
+    <string name="_2_accessibility_service">2: एक्सेसिबिलिटी सेवा।</string>
+    <string name="let_start">शुरू करें!</string>
+    <string name="rate_me">हमें रेट करें</string>
+    <string name="auto_next_tiktool">ऑटो स्वाइप</string>
+    <string name="swipe_direction">स्वाइप की दिशा:</string>
+    <string-array name="swipe_directions">
+        <item>ऊपर स्वाइप करें</item>
+        <item>नीचे स्वाइप करें</item>
+        <item>बाईं ओर स्वाइप करें</item>
+        <item>दाईं ओर स्वाइप करें</item>
+    </string-array>
+    <string name="enable_double_click">स्वाइप के 2s बाद स्क्रीन के बीच में डबल-क्लिक करें</string>
+
+    <string name="grant_appear_on_top_title">अन्य ऐप्स के ऊपर दिखाने की अनुमति दें</string>
+    <string name="grant_appear_on_top_msg">शीर्ष स्क्रीन पर मेनू दिखाने के लिए ऐप को अन्य ऐप्स के ऊपर दिखाने की अनुमति की आवश्यकता है।</string>
+    <string name="open_settings">सेटिंग्स खोलें</string>
+    <string name="cancel">रद्द करें</string>
+
+    <string name="grant_accessibility_title">एक्सेसिबिलिटी अनुमति दें</string>
+    <string name="grant_accessibility_msg">स्क्रीन को स्वचालित रूप से स्वाइप करने के लिए ऐप को एक्सेसिबिलिटी अनुमति की आवश्यकता है। कृपया \'सेटिंग्स खोलें\' पर क्लिक करें और ऑटो स्वाइप को सक्षम करें।</string>
+
+    <string name="auto_swipe_started">ऑटो स्वाइप शुरू हुआ</string>
+    <string name="direction_up">ऊपर</string>
+    <string name="direction_down">नीचे</string>
+    <string name="direction_left">बाएं</string>
+    <string name="direction_right">दाएं</string>
+    <string name="direction_set">दिशा सेट: %s</string>
+    <string name="double_click_enabled">डबल क्लिक सक्षम किया गया</string>
+    <string name="double_click_disabled">डबल क्लिक अक्षम किया गया</string>
+</resources>

@@ -9,7 +9,7 @@
         android:id="@+id/layout_expanded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_expanded_rounded_border"
         android:elevation="8dp"
         android:orientation="vertical"
         android:visibility="visible"

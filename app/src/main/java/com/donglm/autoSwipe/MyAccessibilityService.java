@@ -35,7 +35,7 @@ public class MyAccessibilityService extends AccessibilityService {
     }
 
     public void performSwipe() {
-        android.util.Log.d("donglm", "performSwipe called");
+//        android.util.Log.d("donglm.hbh", "performSwipe called");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             DisplayMetrics displayMetrics = android.content.res.Resources.getSystem().getDisplayMetrics();
             int screenWidth = displayMetrics.widthPixels;
@@ -43,7 +43,7 @@ public class MyAccessibilityService extends AccessibilityService {
 
             android.content.SharedPreferences sharedPref = getSharedPreferences("MyApp", android.content.Context.MODE_PRIVATE);
             int direction = sharedPref.getInt("swipe_direction", 0);
-            Log.d("donglm.hbh", "direction: " + direction);
+//            Log.d("donglm.hbh", "direction: " + direction);
             Path swipePath = new Path();
             if (direction == 1) {
                 swipePath.moveTo(screenWidth / 2f, screenHeight * 0.2f);
@@ -65,17 +65,17 @@ public class MyAccessibilityService extends AccessibilityService {
             boolean result = dispatchGesture(gestureBuilder.build(), new GestureResultCallback() {
                 @Override
                 public void onCompleted(GestureDescription gestureDescription) {
-                    android.util.Log.d("donglm", "Gesture completed");
+//                    android.util.Log.d("donglm", "Gesture completed");
                     super.onCompleted(gestureDescription);
                 }
 
                 @Override
                 public void onCancelled(GestureDescription gestureDescription) {
-                    android.util.Log.d("donglm", "Gesture cancelled");
+//                    android.util.Log.d("donglm", "Gesture cancelled");
                     super.onCancelled(gestureDescription);
                 }
             }, null);
-            android.util.Log.d("donglm", "dispatchGesture returned " + result);
+//            android.util.Log.d("donglm", "dispatchGesture returned " + result);
         }
     }
 

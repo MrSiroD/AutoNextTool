@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">自動スワイプ</string>
+    <string name="to_start_please_allow_2_permissions_below">開始するには、以下の2つの権限を許可してください：</string>
+    <string name="automatically_swipe_the_screen_every_x_seconds">%d秒ごとに画面を自動的にスワイプします。</string>
+    <string name="_1_appear_on_top">1: 他のアプリの上に表示。</string>
+    <string name="_2_accessibility_service">2: ユーザー補助機能。</string>
+    <string name="let_start">開始！</string>
+    <string name="rate_me">評価する</string>
+    <string name="auto_next_tiktool">自動スワイプ</string>
+    <string name="swipe_direction">スワイプ方向：</string>
+    <string-array name="swipe_directions">
+        <item>上にスワイプ</item>
+        <item>下にスワイプ</item>
+        <item>左にスワイプ</item>
+        <item>右にスワイプ</item>
+    </string-array>
+    <string name="enable_double_click">スワイプの2秒後に画面中央をダブルクリックする</string>
+
+    <string name="grant_appear_on_top_title">上に表示する権限を許可</string>
+    <string name="grant_appear_on_top_msg">画面の一番上にメニューを表示するために「他のアプリの上に表示」の権限が必要です。</string>
+    <string name="open_settings">設定を開く</string>
+    <string name="cancel">キャンセル</string>
+
+    <string name="grant_accessibility_title">ユーザー補助権限を許可</string>
+    <string name="grant_accessibility_msg">画面を自動スワイプするためにユーザー補助権限が必要です。「設定を開く」をタップし、自動スワイプを有効にしてください。</string>
+
+    <string name="auto_swipe_started">自動スワイプを開始しました</string>
+    <string name="direction_up">上</string>
+    <string name="direction_down">下</string>
+    <string name="direction_left">左</string>
+    <string name="direction_right">右</string>
+    <string name="direction_set">設定された方向: %s</string>
+    <string name="double_click_enabled">ダブルクリックを有効にしました</string>
+    <string name="double_click_disabled">ダブルクリックを無効にしました</string>
+</resources>
